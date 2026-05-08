@@ -1,0 +1,15 @@
+{
+  "name": "מערך רחפנים",
+  "short_name": "רחפנים",
+  "description": "ניהול מערך רחפנים פלוגתי",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#3b82f6",
+  "dir": "rtl",
+  "lang": "he",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

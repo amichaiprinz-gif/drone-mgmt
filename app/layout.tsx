@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Heebo } from "next/font/google";
 import "./globals.css";
+import { BottomNav } from "@/components/nav/BottomNav";
 
 const heebo = Heebo({
   variable: "--font-heebo",
@@ -21,8 +22,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="he" dir="rtl" className={`${heebo.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-background text-foreground">
-        {children}
+      <body className="min-h-full bg-gray-50 text-foreground">
+        <main className="max-w-2xl mx-auto px-4 pt-6 pb-24 md:pb-6">
+          {children}
+        </main>
+        <BottomNav />
       </body>
     </html>
   );
