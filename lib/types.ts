@@ -55,11 +55,18 @@ export interface ProcedureStep {
 
 export interface Procedure {
   id: string;
-  drone_model: string;
+  drone_model: string | null;
   procedure_type: ProcedureType;
   title: string;
   steps: ProcedureStep[];
   is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Note {
+  id: string;
+  content: string;
   created_at: string;
   updated_at: string;
 }

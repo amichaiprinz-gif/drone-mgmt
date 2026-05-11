@@ -1,19 +1,30 @@
 "use client";
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import type { Procedure } from "@/lib/types";
+
+const typeLabels: Record<string, { label: string; color: string }> = {
+  preflight_normal:    { label: "טרום-טיסה רגיל",  color: "text-blue-600" },
+  preflight_emergency: { label: "טרום-טיסה חירום", color: "text-red-600" },
+  postflight:          { label: "אחרי הטיסה",       color: "text-gray-500" },
+  landing:             { label: "נחיתה",             color: "text-yellow-600" },
+};
 
 export function ProcedureCard({ procedure }: { procedure: Procedure }) {
   const [open, setOpen] = useState(false);
 
-  const byCategory = procedure.steps.reduce<Record<string, typeof procedure.steps>>((acc, s) => {
-    if (!acc[s.category]) acc[s.category] = [];
-    acc[s.category].push(s);
-    return acc;
-  }, {});
+  const byCategory = procedure.steps.reduce<Record<string, typeof procedure.steps>>(
+    (acc, s) => {
+      if (!acc[s.category]) acc[s.category] = [];
+      acc[s.category].push(s);
+      return acc;
+    },
+    {}
+  );
 
   const isEmergency = procedure.procedure_type.includes("emergency");
+  const typeInfo = typeLabels[procedure.procedure_type];
 
   return (
     <Card className={isEmergency ? "border-red-200" : ""}>
@@ -21,25 +32,39 @@ export function ProcedureCard({ procedure }: { procedure: Procedure }) {
         className="pb-2 cursor-pointer select-none"
         onClick={() => setOpen((o) => !o)}
       >
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-semibold flex items-center gap-2">
+        <div dir="rtl" className="flex items-center justify-between">
+          <div dir="rtl" className="flex items-center gap-2 font-semibold text-sm">
             {isEmergency && <span className="text-red-500">🔴</span>}
-            {procedure.title}
-          </CardTitle>
-          {open ? <ChevronUp size={16} className="text-gray-400" /> : <ChevronDown size={16} className="text-gray-400" />}
+            <span>{procedure.title}</span>
+          </div>
+          {open
+            ? <ChevronUp size={16} className="text-gray-400 shrink-0" />
+            : <ChevronDown size={16} className="text-gray-400 shrink-0" />}
         </div>
-        <div className="text-xs text-gray-400">{procedure.steps.length} פריטים</div>
+        <div dir="rtl" className="flex gap-2 text-xs mt-0.5">
+          {typeInfo && <span className={typeInfo.color}>{typeInfo.label}</span>}
+          <span className="text-gray-400">{procedure.steps.length} פריטים</span>
+        </div>
       </CardHeader>
+
       {open && (
         <CardContent className="space-y-4 pt-0">
           {Object.entries(byCategory).map(([cat, steps]) => (
             <div key={cat}>
-              <div className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">{cat}</div>
-              <ol className="space-y-1.5">
+              <p className="text-xs font-bold text-gray-400 tracking-wide mb-2 text-right">
+                {cat}
+              </p>
+              <ol className="space-y-2">
                 {steps.map((s) => (
-                  <li key={s.order} className="text-sm flex gap-2 items-start">
-                    <span className="text-gray-300 w-5 shrink-0 text-left">{s.order}.</span>
-                    <span>{s.text}</span>
+                  <li
+                    key={s.order}
+                    dir="rtl"
+                    className="text-sm flex gap-2 items-start"
+                  >
+                    <span className="text-gray-300 shrink-0 w-5 text-center" dir="ltr">
+                      {s.order}.
+                    </span>
+                    <span className="flex-1 leading-snug">{s.text}</span>
                   </li>
                 ))}
               </ol>

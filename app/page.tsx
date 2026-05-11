@@ -13,7 +13,7 @@ const missionLabels: Record<string, string> = {
 export default async function DashboardPage() {
   const [{ data: drones }, { data: flights }, { data: batteries }, { data: pilots }] =
     await Promise.all([
-      supabase.from("drones").select("*").eq("status", "active"),
+      supabase.from("drones").select("*").neq("status", "inactive"),
       supabase
         .from("flights")
         .select("*, drone:drones(name), pilot:pilots!flights_pilot_id_fkey(name)")
@@ -23,13 +23,15 @@ export default async function DashboardPage() {
       supabase.from("pilots").select("*").eq("is_active", true),
     ]);
 
+  const activeDrones = drones?.filter((d) => d.status === "active") ?? [];
+  const maintenanceDrones = drones?.filter((d) => d.status === "maintenance") ?? [];
   const chargedCount = batteries?.filter((b) => b.status === "charged").length ?? 0;
   const totalBatteries = batteries?.length ?? 0;
   const pendingExam = pilots?.filter((p) => !p.exam_passed) ?? [];
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div dir="rtl" className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">מערך רחפנים</h1>
         <Link href="/flights/new">
           <Button size="sm">+ גיחה חדשה</Button>
@@ -39,8 +41,8 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-3 gap-3">
         <Card>
           <CardContent className="pt-4 text-center">
-            <div className="text-3xl font-bold text-blue-600">{drones?.length ?? 0}</div>
-            <div className="text-xs text-gray-500 mt-1">רחפנים פעילים</div>
+            <div className="text-3xl font-bold text-blue-600">{activeDrones.length}</div>
+            <div className="text-xs text-gray-500 mt-1">רחפנים מבצעיים</div>
           </CardContent>
         </Card>
         <Card>
@@ -57,6 +59,19 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {maintenanceDrones.length > 0 && (
+        <Card className="border-yellow-300 bg-yellow-50">
+          <CardContent className="pt-4">
+            <p className="text-sm font-semibold text-yellow-800 mb-1">🔧 בתחזוקה:</p>
+            <div dir="rtl" className="flex flex-wrap gap-2">
+              {maintenanceDrones.map((d) => (
+                <span key={d.id} className="text-sm text-yellow-700">{d.name}</span>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {pendingExam.length > 0 && (
         <Card className="border-orange-200 bg-orange-50">
@@ -78,14 +93,14 @@ export default async function DashboardPage() {
             <p className="text-sm text-gray-400 text-center py-6">אין גיחות עדיין</p>
           )}
           {flights?.map((f) => (
-            <div key={f.id} className="flex items-center justify-between py-3 border-b last:border-0">
+            <div key={f.id} dir="rtl" className="flex items-center justify-between py-3 border-b last:border-0">
               <div>
                 <div className="text-sm font-medium">{(f.drone as { name: string } | null)?.name ?? "—"}</div>
                 <div className="text-xs text-gray-500">
                   {(f.pilot as { name: string } | null)?.name ?? "—"} · {f.flight_date}
                 </div>
               </div>
-              <div className="flex gap-1">
+              <div dir="rtl" className="flex gap-1">
                 <Badge variant={f.flight_mode === "emergency" ? "destructive" : "secondary"}>
                   {f.flight_mode === "emergency" ? "חירום" : "רגיל"}
                 </Badge>

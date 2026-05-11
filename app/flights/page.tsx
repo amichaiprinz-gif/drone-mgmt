@@ -23,7 +23,7 @@ export default async function FlightsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div dir="rtl" className="flex items-center justify-between">
         <h1 className="text-xl font-bold">לוג גיחות</h1>
         <Link href="/flights/new">
           <Button size="sm">+ גיחה</Button>
@@ -48,14 +48,14 @@ export default async function FlightsPage() {
         return (
           <Card key={f.id} className={hasIssues ? "border-orange-200" : ""}>
             <CardContent className="pt-4">
-              <div className="flex items-start justify-between mb-2">
+              <div dir="rtl" className="flex items-start justify-between mb-2">
                 <div>
                   <div className="font-semibold">
                     {(f.drone as { name: string } | null)?.name ?? "רחפן לא ידוע"}
                   </div>
                   <div className="text-xs text-gray-500">{f.flight_date}</div>
                 </div>
-                <div className="flex gap-1 flex-wrap justify-end">
+                <div dir="rtl" className="flex gap-1 flex-wrap justify-end">
                   <Badge variant={f.flight_mode === "emergency" ? "destructive" : "secondary"}>
                     {f.flight_mode === "emergency" ? "חירום" : "רגיל"}
                   </Badge>
