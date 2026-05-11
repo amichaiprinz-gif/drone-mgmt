@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { InlineBatteries } from "@/components/drones/InlineBatteries";
-import { SwapPrimaryButton } from "@/components/drones/SwapPrimaryButton";
+import { DronePrimaryToggle } from "@/components/drones/DronePrimaryToggle";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
 
@@ -44,11 +44,8 @@ export default async function DronesPage() {
   const civilian = Object.entries(grouped).filter(([, g]) => g.type === "civilian");
 
   function ModelGroup({ model, group }: { model: string; group: { drones: DroneRow[]; batteries: BattRow[] } }) {
-    // Separate primary/secondary (handle missing is_primary column gracefully)
-    const hasPrimaryCol = group.drones.some((d) => "is_primary" in d);
-    const primaryDrone  = hasPrimaryCol ? group.drones.find((d) => d.is_primary) : group.drones[0];
-    const secondaryDrones = hasPrimaryCol ? group.drones.filter((d) => !d.is_primary) : group.drones.slice(1);
-    const canSwap = hasPrimaryCol && !!primaryDrone && secondaryDrones.length === 1;
+    const showBadge = group.drones.length > 1;
+    const hasPrimaryCol = group.drones.some((d) => "is_primary" in d && d.is_primary !== null);
 
     return (
       <Card>
@@ -59,20 +56,18 @@ export default async function DronesPage() {
           <div className="space-y-2">
             {group.drones.map((d) => {
               const s = statusConfig[d.status] ?? statusConfig.inactive;
-              const isPrimary = hasPrimaryCol ? !!d.is_primary : d === primaryDrone;
-              const showBadge = group.drones.length > 1;
+              const isPrimary = hasPrimaryCol ? !!d.is_primary : true;
+              const siblingIds = group.drones.filter((o) => o.id !== d.id).map((o) => o.id);
 
               return (
                 <div key={d.id} dir="rtl" className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    {showBadge && (
-                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full border ${
-                        isPrimary
-                          ? "bg-blue-50 text-blue-700 border-blue-200"
-                          : "bg-gray-50 text-gray-400 border-gray-200"
-                      }`}>
-                        {isPrimary ? "ראשי" : "משני"}
-                      </span>
+                    {showBadge && hasPrimaryCol && (
+                      <DronePrimaryToggle
+                        droneId={d.id}
+                        isPrimary={isPrimary}
+                        siblingIds={siblingIds}
+                      />
                     )}
                     <div>
                       <span className="font-medium text-sm">{d.name}</span>
@@ -96,13 +91,8 @@ export default async function DronesPage() {
             })}
           </div>
 
-          {canSwap && primaryDrone && (
-            <div dir="rtl">
-              <SwapPrimaryButton
-                primaryId={primaryDrone.id}
-                secondaryId={secondaryDrones[0].id}
-              />
-            </div>
+          {showBadge && hasPrimaryCol && (
+            <p className="text-[10px] text-gray-300 mt-2 text-right">לחיצה על הבאדג׳ מחליפה ראשי/משני</p>
           )}
 
           <InlineBatteries batteries={group.batteries} />
