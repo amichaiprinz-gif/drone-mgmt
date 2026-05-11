@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Pencil } from "lucide-react";
 import type { Procedure } from "@/lib/types";
 
 const typeLabels: Record<string, { label: string; color: string }> = {
@@ -33,13 +34,22 @@ export function ProcedureCard({ procedure }: { procedure: Procedure }) {
         onClick={() => setOpen((o) => !o)}
       >
         <div dir="rtl" className="flex items-center justify-between">
-          <div dir="rtl" className="flex items-center gap-2 font-semibold text-sm">
+          <div dir="rtl" className="flex items-center gap-2 font-semibold text-sm flex-1">
             {isEmergency && <span className="text-red-500">🔴</span>}
             <span>{procedure.title}</span>
           </div>
-          {open
-            ? <ChevronUp size={16} className="text-gray-400 shrink-0" />
-            : <ChevronDown size={16} className="text-gray-400 shrink-0" />}
+          <div className="flex items-center gap-2 shrink-0">
+            <Link
+              href={`/procedures/${procedure.id}/edit`}
+              onClick={(e) => e.stopPropagation()}
+              className="text-gray-400 hover:text-blue-500 transition-colors p-1"
+            >
+              <Pencil size={14} />
+            </Link>
+            {open
+              ? <ChevronUp size={16} className="text-gray-400" />
+              : <ChevronDown size={16} className="text-gray-400" />}
+          </div>
         </div>
         <div dir="rtl" className="flex gap-2 text-xs mt-0.5">
           {typeInfo && <span className={typeInfo.color}>{typeInfo.label}</span>}

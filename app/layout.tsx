@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="he" dir="rtl" className={`${heebo.variable} h-full antialiased`}>
       <body className="min-h-full bg-gray-50 text-foreground">
-        <main className="max-w-2xl mx-auto px-4 pt-6 pb-24">
+        <main className="max-w-2xl mx-auto px-4 pt-6 pb-20">
           {children}
         </main>
         <BottomNav />

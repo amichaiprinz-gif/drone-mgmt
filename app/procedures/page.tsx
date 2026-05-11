@@ -1,5 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { ProcedureCard } from "@/components/procedures/ProcedureCard";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +32,12 @@ export default async function ProceduresPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-bold">נהלי הטסה</h1>
+      <div dir="rtl" className="flex items-center justify-between">
+        <h1 className="text-xl font-bold">נהלי הטסה</h1>
+        <Link href="/procedures/new">
+          <Button size="sm">+ נוהל</Button>
+        </Link>
+      </div>
 
       {Object.entries(grouped).map(([model, procs]) => (
         <section key={model}>

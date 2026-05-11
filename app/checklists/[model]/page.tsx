@@ -27,14 +27,15 @@ const modelConfig: Record<string, {
   },
 };
 
-export default async function ModelChecklistPage({ params }: { params: { model: string } }) {
-  const cfg = modelConfig[params.model];
+export default async function ModelChecklistPage({ params }: { params: Promise<{ model: string }> }) {
+  const { model } = await params;
+  const cfg = modelConfig[model];
   if (!cfg) notFound();
 
   const { data: specific } = await supabase
     .from("procedures")
     .select("*")
-    .eq("drone_model", params.model)
+    .eq("drone_model", model)
     .eq("procedure_type", "preflight_normal")
     .eq("is_active", true)
     .order("created_at");

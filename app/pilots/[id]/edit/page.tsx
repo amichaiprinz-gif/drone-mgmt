@@ -6,11 +6,12 @@ import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditPilotPage({ params }: { params: { id: string } }) {
+export default async function EditPilotPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const { data: pilot } = await supabase
     .from("pilots")
     .select("*")
-    .eq("id", params.id)
+    .eq("id", id)
     .single();
 
   if (!pilot) notFound();
