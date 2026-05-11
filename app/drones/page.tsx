@@ -74,6 +74,9 @@ export default async function DronesPage() {
                       {d.serial_number && (
                         <span className="text-xs text-gray-400 mr-1.5">{d.serial_number}</span>
                       )}
+                      {d.notes && (
+                        <p className="text-xs text-gray-400 mt-0.5 leading-snug">{d.notes}</p>
+                      )}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">

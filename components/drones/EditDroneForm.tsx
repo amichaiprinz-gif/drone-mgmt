@@ -30,6 +30,7 @@ export function EditDroneForm({ drone }: { drone: Drone }) {
   const [type, setType] = useState<"military" | "civilian">(drone.type as "military" | "civilian");
   const [status, setStatus] = useState<DroneStatus>(drone.status as DroneStatus);
   const [serialNumber, setSerialNumber] = useState(drone.serial_number ?? "");
+  const [notes, setNotes] = useState(drone.notes ?? "");
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -46,6 +47,7 @@ export function EditDroneForm({ drone }: { drone: Drone }) {
       type,
       status,
       serial_number: serialNumber.trim() || null,
+      notes: notes.trim() || null,
     }).eq("id", drone.id);
     router.push("/drones");
   }
@@ -140,6 +142,18 @@ export function EditDroneForm({ drone }: { drone: Drone }) {
               value={serialNumber}
               onChange={(e) => setSerialNumber(e.target.value)}
               dir="ltr"
+            />
+          </div>
+
+          <div>
+            <Label className="text-sm font-semibold mb-1 block">הערות</Label>
+            <textarea
+              className="w-full rounded-xl border-2 border-gray-200 px-3 py-2.5 text-sm focus:border-blue-400 focus:outline-none resize-none"
+              placeholder="הערות חופשיות על הרחפן..."
+              rows={3}
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              dir="rtl"
             />
           </div>
 
