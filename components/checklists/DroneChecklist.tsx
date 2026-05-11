@@ -81,7 +81,7 @@ export function DroneChecklist({
     <div className="space-y-4 pb-8">
       {/* Hero header */}
       <div className={`bg-gradient-to-br ${accentFrom} ${accentTo} rounded-3xl p-5 text-white shadow-lg`}>
-        <div className="flex items-center justify-between mb-3">
+        <div dir="rtl" className="flex items-center justify-between mb-3">
           <div>
             <p className="text-white/70 text-xs font-medium tracking-widest uppercase mb-0.5">
               Checklist
@@ -103,7 +103,7 @@ export function DroneChecklist({
                 className="transition-all duration-500"
               />
             </svg>
-            <span className="absolute inset-0 flex items-center justify-center text-sm font-bold">
+            <span className="absolute inset-0 flex items-center justify-center text-sm font-bold" dir="ltr">
               {pct}%
             </span>
           </div>
@@ -131,7 +131,7 @@ export function DroneChecklist({
         return (
           <div key={cat} className="rounded-2xl overflow-hidden shadow-sm border border-gray-100">
             {/* Section header */}
-            <div className={`bg-gradient-to-r ${colors.from} ${colors.to} px-4 py-2.5 flex items-center justify-between`} dir="rtl">
+            <div dir="rtl" className={`bg-gradient-to-r ${colors.from} ${colors.to} px-4 py-2.5 flex items-center justify-between`}>
               <div className="flex items-center gap-2">
                 <div className={`w-2 h-2 rounded-full ${colors.dot}`} />
                 <span className={`font-bold text-sm tracking-wide ${colors.text}`}>{cat}</span>

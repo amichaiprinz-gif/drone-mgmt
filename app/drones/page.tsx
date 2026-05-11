@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabase";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { InlineBatteries } from "@/components/drones/InlineBatteries";
+import { Pencil } from "lucide-react";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -52,7 +53,7 @@ export default async function DronesPage() {
             {group.drones.map((d) => {
               const s = statusConfig[d.status] ?? statusConfig.inactive;
               return (
-                <div key={d.id} className="flex items-center justify-between">
+                <div key={d.id} dir="rtl" className="flex items-center justify-between">
                   <div>
                     <span className="font-medium text-sm">{d.name}</span>
                     {d.serial_number && (
@@ -64,8 +65,8 @@ export default async function DronesPage() {
                       {s.label}
                     </span>
                     <Link href={`/drones/${d.id}/edit`}>
-                      <button className="text-xs text-gray-400 hover:text-blue-500 transition-colors px-1">
-                        ערוך
+                      <button className="text-gray-400 hover:text-blue-500 transition-colors p-1">
+                        <Pencil size={14} />
                       </button>
                     </Link>
                   </div>
@@ -81,10 +82,10 @@ export default async function DronesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div dir="rtl" className="flex items-center justify-between">
         <h1 className="text-xl font-bold">רחפנים</h1>
         <div className="flex gap-2">
-          <Link href="/procedures">
+          <Link href="/checklists">
             <Button size="sm" variant="outline">נהלים</Button>
           </Link>
           <Link href="/drones/new">

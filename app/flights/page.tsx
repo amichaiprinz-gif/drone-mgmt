@@ -67,14 +67,22 @@ export default async function FlightsPage() {
                 </div>
               </div>
 
-              <div className="text-xs text-gray-500 space-y-0.5">
-                <div>
-                  מטיס: {(f.pilot as { name: string } | null)?.name ?? "—"}
-                  {(f.observer as { name: string } | null)?.name &&
-                    ` · צופה: ${(f.observer as { name: string }).name}`}
+              <div dir="rtl" className="text-xs text-gray-500 space-y-0.5">
+                <div className="flex flex-wrap gap-x-2">
+                  <span>מטיס: {(f.pilot as { name: string } | null)?.name ?? "—"}</span>
+                  {(f.observer as { name: string } | null)?.name && (
+                    <span>· צופה: {(f.observer as { name: string }).name}</span>
+                  )}
+                  {f.duration_minutes && (
+                    <span>· {f.duration_minutes} דק׳</span>
+                  )}
                 </div>
                 {f.area && <div>אזור: {f.area}</div>}
-                <div>צ׳קליסט: {checked}/{checklist.length}</div>
+                {checklist.length > 0 && (
+                  <div className={checked === checklist.length ? "text-green-600" : ""}>
+                    צ׳קליסט: {checked}/{checklist.length} {checked === checklist.length ? "✓" : ""}
+                  </div>
+                )}
                 {f.notes && <div className="text-gray-400 italic">{f.notes}</div>}
                 {hasIssues && (
                   <div className="text-orange-600 font-medium">⚠️ {f.issues}</div>

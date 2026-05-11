@@ -32,7 +32,7 @@ export function InlineBatteries({ batteries }: { batteries: Battery[] }) {
 
   return (
     <div className="mt-3 pt-3 border-t border-gray-100">
-      <div className="flex items-center justify-between mb-2">
+      <div dir="rtl" className="flex items-center justify-between mb-2">
         <span className="text-xs text-gray-400">סוללות</span>
         <span className="text-xs text-gray-400">{charged}/{batteries.length} טעונות</span>
       </div>
