@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export default async function NewFlightPage() {
   const [{ data: drones }, { data: pilots }, { data: procedures }, { data: batteries }] =
     await Promise.all([
-      supabase.from("drones").select("id, name, model").eq("status", "active").order("name"),
+      supabase.from("drones").select("id, name, model, is_primary").eq("status", "active").order("name"),
       supabase.from("pilots").select("id, name, certifications, exam_passed").eq("is_active", true).order("name"),
       supabase.from("procedures").select("*").eq("is_active", true),
       supabase.from("batteries").select("id, label, drone_model, status").order("label"),
@@ -23,7 +23,7 @@ export default async function NewFlightPage() {
         <h1 className="text-xl font-bold">גיחה חדשה</h1>
       </div>
       <NewFlightWizard
-        drones={drones ?? []}
+        drones={(drones ?? []).filter((d) => d.is_primary !== false)}
         pilots={pilots ?? []}
         procedures={procedures ?? []}
         batteries={batteries ?? []}

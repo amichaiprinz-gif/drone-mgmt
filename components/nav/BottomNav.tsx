@@ -1,14 +1,14 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Plane, Users, Cpu, BatteryCharging, StickyNote } from "lucide-react";
+import { LayoutDashboard, Plane, Users, Cpu, CheckSquare, StickyNote } from "lucide-react";
 
 const navItems = [
   { href: "/", label: "בית", icon: LayoutDashboard },
   { href: "/flights", label: "גיחות", icon: Plane },
   { href: "/pilots", label: "מטיסים", icon: Users },
   { href: "/drones", label: "רחפנים", icon: Cpu },
-  { href: "/batteries", label: "סוללות", icon: BatteryCharging },
+  { href: "/procedures", label: "נהלים", icon: CheckSquare },
   { href: "/notes", label: "פתקים", icon: StickyNote },
 ];
 
